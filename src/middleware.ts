@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "./auth";
 import { authRoutes, publicRoutes } from "./routes";
-import { url } from "inspector";
+
 
 export default auth((req) => {
     const {nextUrl} = req;
