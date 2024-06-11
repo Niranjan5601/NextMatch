@@ -6,6 +6,8 @@ import { getAuthUserId } from "@/app/actions/authActions";
 import { getMemberPhotosByUserId } from "@/app/actions/memberActions";
 import StarButton from "@/components/StarButton";
 import DeleteButton from "@/components/DeleteButton";
+import MemberPhotoUpload from "./MemberPhotoUpload";
+import MemberImage from "@/components/MemberImage";
 
 export default async function PhotosPage() {
   const userId = await getAuthUserId();
@@ -19,19 +21,12 @@ export default async function PhotosPage() {
       </CardHeader>
       <Divider />
       <CardBody>
-      <div className="pt-5 pl-5">
-          <ImageUploadButton/>
-        </div>
+        <MemberPhotoUpload/>
         <div className="grid grid-cols-5 gap-3 p-5">
           {photos &&
             photos.map((photo) => (
               <div key={photo.id} className="relative">
-                <Image
-                  width={200}
-                  height={220}
-                  src={photo.url}
-                  alt="Image of user"
-                />
+                <MemberImage photo={photo}/>
                 <div className="absolute top-3 left-3 z-50">
                   <StarButton selected={false} loading={false} />
                 </div>
