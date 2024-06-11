@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Card, CardHeader, CardBody, Button, Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -8,13 +8,14 @@ import { RegisterSchema, registerSchema } from "@/lib/schemas/registerSchema";
 import { registerUser } from "@/app/actions/authActions";
 import { ZodError } from "zod";
 import { error } from "console";
+import { handleFromServerErrors } from "@/lib/util";
 
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isValid,isSubmitting },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<RegisterSchema>({
     // resolver: zodResolver(registerSchema),
     mode: "onTouched",
@@ -22,19 +23,11 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterSchema) => {
     const result = await registerUser(data);
-    
-    if(result.status === 'success'){
-      console.log("User registered successfully")
-    }
-    else{
-      if(Array.isArray(result.error)){
-        result.error.forEach((e) =>{
-          const fieldName = e.path.join('.') as 'email'|'name'|'password';
-          setError(fieldName,{message:e.message})
-        })
-      }else{
-        setError('root.serverError',{message:result.error});
-      }
+
+    if (result.status === "success") {
+      console.log("User registered successfully");
+    } else {
+      handleFromServerErrors(result, setError);
     }
   };
 
@@ -78,10 +71,12 @@ export default function RegisterForm() {
               errorMessage={errors.password?.message}
             />
             {errors.root?.serverError && (
-              <p className="text-danger text-sm">{errors.root.serverError.message}</p>
+              <p className="text-danger text-sm">
+                {errors.root.serverError.message}
+              </p>
             )}
             <Button
-            isLoading = {isSubmitting}
+              isLoading={isSubmitting}
               isDisabled={!isValid}
               fullWidth
               color="secondary"
