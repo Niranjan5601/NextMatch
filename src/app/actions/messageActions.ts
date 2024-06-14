@@ -4,11 +4,11 @@ import { MessageSchema, messageSchema } from "@/lib/schemas/messageSchema";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 import { ActionResult, MessageDto } from "@/types";
-import { Message } from "@prisma/client";
+
 import { mapMessageToMessageDto } from "@/lib/mappings";
 import { pusherServer } from "@/lib/pusher";
 import { createChatId } from "@/lib/util";
-import { create } from "domain";
+
 
 export async function createMessage(
   recipientUserId: string,
@@ -36,7 +36,8 @@ export async function createMessage(
       "message:new",
       messageDto
     );
-    await pusherServer.trigger(`private-${recipientUserId}`,'message-new',messageDto)
+    await pusherServer.trigger(`private-${recipientUserId}`,'message:new',messageDto)
+   
     return { status: "success", data: messageDto };
   } catch (error) {
     console.log(error);
@@ -67,6 +68,9 @@ export async function getMessageThread(recipientId: string) {
       },
       select: messageSelect,
     });
+
+    let readCount = 0;
+
     if (messages.length > 0) {
       const readMessageIds = messages
         .filter(
@@ -81,13 +85,19 @@ export async function getMessageThread(recipientId: string) {
         data: { dateRead: new Date() },
       });
 
+      readCount=readMessageIds.length;
+
       await pusherServer.trigger(
         createChatId(recipientId, userId),
         "message:read",
         readMessageIds
       );
     }
-    return messages.map((message) => mapMessageToMessageDto(message));
+
+    const messagesToReturn = messages.map((message) => mapMessageToMessageDto(message));
+
+
+    return {messages:messagesToReturn , readCount}
   } catch (error) {
     console.log(error);
     throw error;
@@ -158,6 +168,24 @@ export async function deleteMessage(messageId: string, isOutbox: boolean) {
     throw error;
   }
 }
+
+export async function getUnreadMessageCount(){
+  try {
+    const userId = await getAuthUserId();
+
+    return prisma.message.count({
+      where:{
+        recipientId:userId,
+        dateRead:null,
+        recipientDeleted:false
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 
 const messageSelect = {
   id: true,
