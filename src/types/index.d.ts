@@ -37,7 +37,8 @@ type MessageWithSenderRecipient = Prisma.MessageGetPayload<{
 type UserFilters = {
   ageRange : number[],
   orderBy: string,
-  gender: string []
+  gender: string [],
+  withPhoto:boolean
 }
 
 type PaginParams = {
@@ -53,4 +54,13 @@ type PaginResult = {
 type PaginatedResponse<T> = {
   items: T[]
   totaltCount : number
+}
+
+type GetMemberParams = {
+  ageRange?:string;
+  gender?:string;
+  pageNumber?:string;
+  pageSize?: string;
+  orderBy?:string
+  withPhoto?:string
 }

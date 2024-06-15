@@ -4,9 +4,10 @@ import {
   Button,
   Select,
   SelectItem,
-  Selection,
+
   Slider,
   Spinner,
+  Switch,
 } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -20,8 +21,10 @@ export default function Filters() {
     selectAge,
     selectGender,
     selectOrder,
+    selectWithPhoto,
     clientLoaded,
     isPending,
+    totalCount,
   } = useFilters();
 
   return (
@@ -55,6 +58,16 @@ export default function Filters() {
             maxValue={100}
             defaultValue={filters.ageRange}
             onChangeEnd={(value) => selectAge(value as number[])}
+            aria-label="Age Range slider"
+          />
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="text-sm">With Photo</p>
+          <Switch 
+            color="secondary"
+            defaultSelected
+            size="sm"
+            onChange={selectWithPhoto}
           />
         </div>
         <div className="w-1/4">

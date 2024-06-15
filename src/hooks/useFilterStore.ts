@@ -14,7 +14,8 @@ const useFilterStore = create<FilterState>()(devtools((set) => ({
     filters:{
         ageRange:[18,100],
         gender: ['male','femlae'],
-        orderBy:'updated'
+        orderBy:'updated',
+        withPhoto: true
     },
     setFilters: (filterName, value) => set(state => {
         return {

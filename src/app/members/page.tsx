@@ -4,15 +4,15 @@ import MemberCard from "./MemberCard";
 import { fetchCurrentUserLikeIds } from "../actions/likesAction";
 
 import PaginationComponent from "@/components/PaginationComponent";
-import { UserFilters } from "@/types";
+import { GetMemberParams } from "@/types";
 import EmptyState from "@/components/EmptyState";
 
 export default async function MembersPage({
   searchParams,
 }: {
-  searchParams: UserFilters;
+  searchParams: GetMemberParams;
 }) {
-  const members = await getMembers(searchParams);
+  const {items:members,totaltCount} = await getMembers(searchParams);
   const likeIds = await fetchCurrentUserLikeIds();
   return (
     <>
@@ -26,7 +26,7 @@ export default async function MembersPage({
                 <MemberCard member={member} likeIds={likeIds} key={member.id} />
               ))}
           </div>
-          <PaginationComponent />
+          <PaginationComponent totalCount={totaltCount}/>
         </>
       )}
     </>
