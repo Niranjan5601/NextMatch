@@ -32,3 +32,25 @@ type MessageWithSenderRecipient = Prisma.MessageGetPayload<{
     };
   };
 }>;
+
+
+type UserFilters = {
+  ageRange : number[],
+  orderBy: string,
+  gender: string []
+}
+
+type PaginParams = {
+  pageNumber : number,
+  pageSize: number
+}
+
+type PaginResult = {
+  totalPages: number,
+  totalCount: number
+} & PaginParams
+
+type PaginatedResponse<T> = {
+  items: T[]
+  totaltCount : number
+}
