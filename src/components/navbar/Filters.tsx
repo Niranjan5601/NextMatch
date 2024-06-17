@@ -31,7 +31,7 @@ export default function Filters() {
     <div className="shadow-md py-2 ">
       <div className="flex flex-row justify-around items-center">
         <div className="flex gap-2 items-center">
-          <div className="text-secondary font-semibold text-xl">Results:10</div>
+          <div className="text-secondary font-semibold text-xl">Results: {totalCount}</div>
           {isPending && <Spinner size="sm" color="secondary"/>}
         </div>
 
