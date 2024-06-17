@@ -8,6 +8,7 @@ export default auth((req) => {
     const isLoggedIn = !!req.auth;
     const isPublic = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+    const isProfileComplete = req.auth?.user.profileCompleteFlag;
 
     if(isPublic){
         return NextResponse.next();
@@ -22,6 +23,10 @@ export default auth((req) => {
 
     if(!isPublic && !isLoggedIn){
         return NextResponse.redirect(new URL('/login',nextUrl))
+    }
+
+    if(isLoggedIn && !isProfileComplete && nextUrl.pathname !=='/complete-profile'){
+        return NextResponse.redirect(new URL('/complete-profile',nextUrl))
     }
 
     return NextResponse.next();

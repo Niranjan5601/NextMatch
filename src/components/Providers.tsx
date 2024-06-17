@@ -7,7 +7,7 @@ import { NextUIProvider } from '@nextui-org/react'
 import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-export default function Providers({children,userId}:{children:ReactNode,userId:string|null}) {
+export default function Providers({children,userId,profileCompleteFlag}:{children:ReactNode,userId:string|null,profileCompleteFlag:boolean}) {
   
     const isUnreadCountSet = useRef(false);
 
@@ -30,8 +30,8 @@ export default function Providers({children,userId}:{children:ReactNode,userId:s
   },[setUnreadCount,userId])
   
   
-  usePresenceChannel(userId);
-  useNotificationChannel(userId);
+  usePresenceChannel(userId,profileCompleteFlag);
+  useNotificationChannel(userId,profileCompleteFlag);
   return (
     <NextUIProvider>
       <ToastContainer position='bottom-right' hideProgressBar className='z-50'/>

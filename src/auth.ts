@@ -13,9 +13,16 @@ export const {
   signOut,
 } = NextAuth({
   callbacks:{
+    async jwt({user,token}){
+      if(user){
+        token.profileCompleteFlag = user.profileCompleteFlag
+      }
+      return token;
+    },
     async session({token,session}){
      if(token.sub && session.user){
       session.user.id = token.sub;
+      session.user.profileCompleteFlag = token.profileCompleteFlag as boolean;
      }
       return session;
     }

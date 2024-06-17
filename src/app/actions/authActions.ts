@@ -1,7 +1,7 @@
 'use server';
 
 import bcrypt from 'bcryptjs';
-import { RegisterSchema, combinedRegisterSchmea, registerSchema } from "@/lib/schemas/registerSchema";
+import { ProfileSchema, RegisterSchema, combinedRegisterSchmea, profileSchema, registerSchema } from "@/lib/schemas/registerSchema";
 import { prisma } from '@/lib/prisma';
 import { ActionResult } from '@/types';
 import { TokenType, User } from '@prisma/client';
@@ -211,5 +211,41 @@ export async function resetPassword(password: string, token: string | null): Pro
     } catch (error) {
         console.log(error);
         return {status: 'error', error: 'Something went wrong'}
+    }
+}
+
+export async function completeSocialLoginProfile(data: ProfileSchema):Promise<ActionResult<string>>{
+    const session = await auth();
+    if(!session?.user) return {status:'error',error:'User not found'}
+
+    try {
+        const user = await prisma.user.update({
+            where:{id:session.user.id},
+            data:{
+                profileCompleteFlag:true,
+                member:{
+                    create:{
+                        name:session.user.name as string,
+                        image:session.user.image ,
+                        gender:data.gender,
+                        dateOfBirth:new Date(data.dateOfBirth),
+                        description:data.description,
+                        city:data.city,
+                        country:data.country
+                    }
+                }
+            },
+            select:{
+                accounts:{
+                    select:{
+                        provider:true
+                    }
+                }
+            }
+        })
+        return {status:'success',data:user.accounts[0].provider}
+    } catch (error) {
+        console.log(error);
+        throw error
     }
 }
