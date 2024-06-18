@@ -4,30 +4,30 @@ import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-async function seedMembers(){
+async function seedMembers() {
     return membersData.map(async member => prisma.user.create({
-        data:{
-            email:member.email,
+        data: {
+            email: member.email,
             emailVerified: new Date(),
-            name:member.name,
-            passwordHash: await hash('password',10),
+            name: member.name,
+            passwordHash: await hash('password', 10),
             image: member.image,
-            profileCompleteFlag:true,
+            profileCompleteFlag: true,
             member: {
-                create:{
+                create: {
                     dateOfBirth: new Date(member.dateOfBirth),
-                    gender:member.gender,
+                    gender: member.gender,
                     name: member.name,
                     created: new Date(member.created),
                     updated: new Date(member.lastActive),
                     description: member.description,
-                    city:member.city,
-                    country:member.country,
-                    image:member.image,
-                    photos:{
-                        create:{
-                            url:member.image,
-                            isApproved:true
+                    city: member.city,
+                    country: member.country,
+                    image: member.image,
+                    photos: {
+                        create: {
+                            url: member.image,
+                            isApproved: true
                         }
                     }
 
@@ -37,29 +37,31 @@ async function seedMembers(){
     }))
 }
 
-async function seedAdmin(){
+async function seedAdmin() {
     return prisma.user.create({
-        data:{
-            email:'admin@test.com',
-            emailVerified:new Date(),
-            name:'Admin',
-            passwordHash: await hash('password',10),
-            role:'ADMIN'
+        data: {
+            email: 'admin@test.com',
+            emailVerified: new Date(),
+            name: 'Admin',
+            passwordHash: await hash('password', 10),
+            role: 'ADMIN'
         }
     })
 }
 
 async function main() {
+    if (process.env.RUN_SEED === 'true' || process.env.NODE_ENV === 'development') {
+        await seedMembers();
+        await seedAdmin();
+    }
 
-    await seedMembers();
-    await seedAdmin();
-    
+
 }
 
 main().catch(e => {
     console.log(e);
     process.exit(1);
-}).finally(async() => {
+}).finally(async () => {
     await prisma.$disconnect();
 })
 
