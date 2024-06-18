@@ -25,7 +25,7 @@ export default async function PhotosPage() {
       <Divider />
       <CardBody>
         
-        <MemberPhotos photos={photos}/>
+        <MemberPhotos  photos={photos} editing={true} mainImageUrl={member?.image}/>
       </CardBody>
     </>
   );
