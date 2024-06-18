@@ -50,16 +50,16 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
 
         <div className="grid grid-cols-5 gap-3 p-5">
             {photos &&
-                photos.map((photo) => (
+                photos.map( photo => (
                     <div key={photo.id} className="relative">
                         <MemberImage photo={photo} />
                         {editing && (
                             <>
                                 <div onClick={() => onSetMain(photo)} className="absolute top-3 left-3 z-50">
-                                    <StarButton selected={photo.url === mainImageUrl} loading={loading.isLoading && loading.type === ' main' && loading.id === photo.id} />
+                                    <StarButton selected={photo.url === mainImageUrl} loading={loading.isLoading && loading.type === 'main' && loading.id === photo.id} />
                                 </div>
                                 <div onClick={() => onDelete(photo)} className="absolute top-3 right-3 z-50">
-                                    <DeleteButton loading={loading.isLoading && loading.type === ' delete' && loading.id === photo.id} />
+                                    <DeleteButton loading={loading.isLoading && loading.type === 'delete' && loading.id === photo.id} />
                                 </div>
                             </>
                         )
