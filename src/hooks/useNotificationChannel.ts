@@ -55,5 +55,5 @@ export const useNotificationChannel = (userId:string|null,profileCompleteFlag:bo
                 channelRef.current = null;
             }
         }
-    },[userId,handleNewMessage,profileCompleteFlag])
+    },[userId,handleNewMessage,profileCompleteFlag,handleNewLike])
 }

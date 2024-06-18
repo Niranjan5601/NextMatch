@@ -44,7 +44,7 @@ export const useFilters = () => {
       searchParams.set('withPhoto',withPhoto.toString())
       router.replace(`${pathName}?${searchParams}`);
     });
-  }, [ageRange, orderBy, gender, router, pathName, pageNumber, pageSize]);
+  }, [ageRange, orderBy, gender, router, pathName, pageNumber, pageSize,withPhoto]);
 
   const orderByList = [
     { label: "Last active", value: "updated" },
