@@ -14,7 +14,7 @@ export default function RegisterSuccess() {
   return (
     <CardWrapper 
         headerText='You have successfully registered'
-        subHeaderText='You can now login to the app'
+        subHeaderText='Please verify your email before logging in'
         action={() => router.push('/login')}
         actionLabel='Go to login'
         headerIcon={FaCheckCircle}
