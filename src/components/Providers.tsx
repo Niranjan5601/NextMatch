@@ -4,6 +4,7 @@ import useMessageStore from '@/hooks/useMessageStore';
 import { useNotificationChannel } from '@/hooks/useNotificationChannel';
 import { usePresenceChannel } from '@/hooks/usePresenceChannel';
 import { NextUIProvider } from '@nextui-org/react'
+import { SessionProvider } from 'next-auth/react';
 import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,9 +34,13 @@ export default function Providers({children,userId,profileCompleteFlag}:{childre
   usePresenceChannel(userId,profileCompleteFlag);
   useNotificationChannel(userId,profileCompleteFlag);
   return (
-    <NextUIProvider>
+    <SessionProvider>
+       <NextUIProvider>
       <ToastContainer position='bottom-right' hideProgressBar className='z-50'/>
         {children}
     </NextUIProvider>
+       
+    </SessionProvider>
+   
   )
 }

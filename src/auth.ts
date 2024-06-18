@@ -3,6 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 
 import authConfig from "./auth.config"
 import { prisma } from "./lib/prisma"
+import { Role } from "@prisma/client"
 
 
 
@@ -15,7 +16,8 @@ export const {
   callbacks:{
     async jwt({user,token}){
       if(user){
-        token.profileCompleteFlag = user.profileCompleteFlag
+        token.profileCompleteFlag = user.profileCompleteFlag;
+        token.role=user.role;
       }
       return token;
     },
@@ -23,7 +25,8 @@ export const {
      if(token.sub && session.user){
       session.user.id = token.sub;
       session.user.profileCompleteFlag = token.profileCompleteFlag as boolean;
-     }
+      session.user.role = token.role as Role
+    }
       return session;
     }
   },
